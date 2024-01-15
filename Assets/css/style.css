@@ -1,0 +1,50 @@
+
+/*Styling og button elements*/
+button{
+    color:white;
+    background-color: blue;
+    padding: 5px;
+    margin: 1px;
+}
+
+/*Styling og button elements, when mouse hovers over*/
+button:hover{
+    color:white;
+    background-color: rgb(106, 106, 255);
+}
+
+/*Styling of head bar - align highscore, score and timer elements*/
+header{
+    display: flex;
+    justify-content: space-between;
+}
+
+/*used to switch sections on during quiz*/
+.visible
+{
+    display: inline;
+}
+
+/*used to hide elements when no needed*/
+.hidden
+{
+    display: none;
+}
+
+/*Styling of buttons during quiz*/
+.quizbutton{
+    color:white;
+    background-color: blue;
+    padding: 5px;
+}
+
+/*Styling of buttons when hovered during quiz*/
+.quizbutton:hover{
+    color:white;
+    background-color: rgb(106, 106, 255);
+}
+
+/*High light for the most recent score on the highscore board*/
+.lastAttempt{
+    background-color: bisque;
+}
