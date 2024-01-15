@@ -31,12 +31,39 @@ function updateLocalStorage(newVal)
 //clear local storage
 
 //get location lat and long - openweatrher map direct geocoding
+function geocodelocation(str)
+{   
+    var url = 
+    var geocode = apiGet(ulr);
+    var obj = {
+        lat: "",
+        long: "",
+    };
+
+    return obj;
+}
+
+function apiGet(url)
+{
+    fetch(url).then(function (response){
+        if(response.ok){
+            response.json().then(function (data){
+                return data;
+            });
+        }else{
+            return ('Error: ' + response.statusText);
+        }
+    })
+}
 
 //API Get Location weather
 function getWeatherData(search)
 {
     return;
 }
+
+function API_GET()
+{}
 
 //render page
 function renderPage()
