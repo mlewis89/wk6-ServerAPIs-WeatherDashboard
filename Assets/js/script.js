@@ -40,8 +40,7 @@ function getWeatherData_FromCityName(city)
     .then(function (response) {
       if (response.ok) {
         response.json().then(function (data) {
-            console.log(data);
-          getWeatherData_FromLatLong(data[0].lat,data[0].lon,city);
+          getWeatherData_FromLatLong(data[0].lat,data[0].lon);
         });
       } else {
         alert('Error: ' + response.statusText);
@@ -76,30 +75,7 @@ function displayWeather(weatherData)
 {
     console.log(data);
     console.log(str);
-
 }
-
-function apiGet(apiUrl)
-{
-    fetch(apiUrl)
-    .then(function (response) {
-      if (response.ok) {
-        response.json().then(function (data) {
-          return data;
-        });
-      } else {
-        alert('Error: ' + response.statusText);
-      }
-    })
-    .catch(function (error) {
-      alert('Unable to connect to GitHub');
-    });
-}
-
-
-
-function API_GET()
-{}
 
 //render page
 function renderPage()
