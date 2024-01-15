@@ -54,7 +54,7 @@ function getWeatherData_FromCityName(city) {
 
 //API Get Location weather
 function getWeatherData_FromLatLong(lat, long) {
-    var apiUrl = 'http://api.openweathermap.org/data/2.5/forecast?lat=' + lat + '&lon=' + long + '&units=metric&appid=' + APIkey
+    var apiUrl = 'api.openweathermap.org/data/2.5/forecast/daily?lat=' + lat + '&lon=' + long + '&cnt=6&appid=' + APIkey
 
     fetch(apiUrl)
         .then(function (response) {
@@ -73,15 +73,23 @@ function getWeatherData_FromLatLong(lat, long) {
 
 function displayWeather(weatherData) {
     console.log(weatherData);
-    var todayObj = {
-        city: weatherData.city.name,
-        date: dayjs.unix(weatherData.list[0].dt),
+    //today's forcast
+    TodayFocastEL.append($('<h2></h2>').text(weatherData.city.name + ' (' + dayjs.unix(weatherData.list[0].dt).format('DD/MM/YYYY') + ')'));
+    TodayFocastEL.append($('<p></p>').text('Temp: ' + weatherData.list[0].main.temp' (min: '+weatherData.list.main.temp_min+',max: '+weatherData.list.main.temp_max+' )'));
+    TodayFocastEL.append($('<p></p>').text('Wind: ' + weatherData.list[0].wind.speed' km/h'));
+    TodayFocastEL.append($('<p></p>').text('Humidity: ' + weatherData.list[0].main.humidty));
+    
 
-
-    };
-
-
-    TodayFocastEL.append($('<h2></h2>').text(todayObj.city + '(' + todayObj.date.format('DD/MM/YYYY') + ')'));
+   //5day forcasts
+    for(var i = 0;i<=5;i++)
+    {
+        var weatherEL = $('<div></div>');
+        weatherEL.append($('<h3></h3>').text(dayjs.unix(weatherData.list[0].dt).format('DD/MM/YYYY')));
+        weatherEL.append($('<p></p>').text('Temp: ' + weatherData.list[0].main.temp' (min: '+weatherData.list.main.temp_min+',max: '+weatherData.list.main.temp_max+' )'));
+        weatherEL.append($('<p></p>').text('Wind: ' + weatherData.list[0].wind.speed' km/h'));
+        weatherEL.append($('<p></p>').text('Humidity: ' + weatherData.list[0].main.humidty));
+        FiveDayFocastEL.append(weatherEL);
+    }
 }
 
 //render page
