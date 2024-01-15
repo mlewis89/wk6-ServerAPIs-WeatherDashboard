@@ -1,6 +1,9 @@
 //HTML ELEMNETS
-SearchButtonEL  = $('#Search-btn');
+SearchButtonEL = $('#Search-btn');
 SeachDataEL = $('#search-text');
+PastCitiesEL = $('#PreviousSearchContainer');
+TodayFocastEL = $('#todayForcast');
+FiveDayFocastEL = $('#5DayForcast');
 
 //GLOBAL: VARIABLES
 storageKey = "wk6-WeatherDashboard";
@@ -9,79 +12,91 @@ APIkey = "206a083510fdb299f5bde1e92a72e4f7";
 var currentWeather = {};
 
 //Event handler for search
-SearchButtonEL.on('click',function()
-{
+SearchButtonEL.on('click', function () {
     var SearchText = SeachDataEL.val();
     updateLocalStorage(SearchText);
-    getWeatherData_FromCityName(SearchText);
     renderPage();
 });
 
 //save search to local storage
-function updateLocalStorage(newVal)
-{
+function updateLocalStorage(newVal) {
     var data = JSON.parse(localStorage.getItem(storageKey))
-    if(data === undefined || data === null)
-    {
+    if (data === undefined || data === null) {
         var data = [];
+        data.push(newVal);
     }
-    data.push(newVal);
-    localStorage.setItem(storageKey,JSON.stringify(data));
+    else if (data[data.length - 1].toLowerCase() != newVal.toLowerCase()) {
+        data.push(newVal);
+    }
+    localStorage.setItem(storageKey, JSON.stringify(data));
 }
 
 //clear local storage
 
 //get location lat and long - openweatrher map direct geocoding
-function getWeatherData_FromCityName(city)
-{   
-    var apiUrl = 'http://api.openweathermap.org/geo/1.0/direct?q='+city+'&limit=1&appid='+APIkey;
+function getWeatherData_FromCityName(city) {
+    var apiUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + city + '&limit=1&appid=' + APIkey;
     //var geocode = apiGet(url);
     fetch(apiUrl)
-    .then(function (response) {
-      if (response.ok) {
-        response.json().then(function (data) {
-          getWeatherData_FromLatLong(data[0].lat,data[0].lon);
+        .then(function (response) {
+            if (response.ok) {
+                response.json().then(function (data) {
+                    getWeatherData_FromLatLong(data[0].lat, data[0].lon);
+                });
+            } else {
+                alert('Error: ' + response.statusText);
+            }
+        })
+        .catch(function (error) {
+            alert('Unable to connect to openmweathermap.org');
         });
-      } else {
-        alert('Error: ' + response.statusText);
-      }
-    })
-    .catch(function (error) {
-      alert('Unable to connect to openmweathermap.org');
-    });
 }
 
 //API Get Location weather
-function getWeatherData_FromLatLong(lat,long)
-{
-    var apiUrl = 'http://api.openweathermap.org/data/2.5/forecast?lat='+lat+'&lon='+long+'&appid='+APIkey
-    
+function getWeatherData_FromLatLong(lat, long) {
+    var apiUrl = 'http://api.openweathermap.org/data/2.5/forecast?lat=' + lat + '&lon=' + long + '&units=metric&appid=' + APIkey
+
     fetch(apiUrl)
-    .then(function (response) {
-      if (response.ok) {
-        response.json().then(function (data) {
-          displayWeather(data);
+        .then(function (response) {
+            if (response.ok) {
+                response.json().then(function (data) {
+                    displayWeather(data);
+                });
+            } else {
+                alert('Error: ' + response.statusText);
+            }
+        })
+        .catch(function (error) {
+            alert('Unable to connect to openmweathermap.org');
         });
-      } else {
-        alert('Error: ' + response.statusText);
-      }
-    })
-    .catch(function (error) {
-      alert('Unable to connect to openmweathermap.org');
-    });
 }
-    
-function displayWeather(weatherData)
-{
-    console.log(data);
-    console.log(str);
+
+function displayWeather(weatherData) {
+    console.log(weatherData);
+    var todayObj = {
+        city: weatherData.city.name,
+        date: dayjs.unix(weatherData.list[0].dt),
+
+
+    };
+
+
+    TodayFocastEL.append($('<h2></h2>').text(todayObj.city + '(' + todayObj.date.format('DD/MM/YYYY') + ')'));
 }
 
 //render page
-function renderPage()
-{
-
+function renderPage() {
+    PastCitiesEL.innerHTML = '';
+    var cities = JSON.parse(localStorage.getItem(storageKey));
+    if (cities !== null || cities !== undefined) {
+        for (var i = 0; i < cities.length; i++) {
+            var li = $('<li></li>').text(cities[i])
+            PastCitiesEL.append(li);
+        }
+        getWeatherData_FromCityName(cities[cities.length - 1]);
+    }
 }
 
 //init 
 //load previous searches to page
+renderPage();
