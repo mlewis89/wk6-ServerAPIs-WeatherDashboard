@@ -36,7 +36,7 @@ function updateLocalStorage(newVal) {
     //else if (data.[data.length - 1].toLowerCase() != newVal.toUpperCase()) {
     else if (data.includes(newVal)) { //if already exists move it to end of list
         var indexof = data.indexOf(newVal);
-        data.push(data.splice(indexof, 1)[0]);       
+        data.push(data.splice(indexof, 1)[0]);
     } else {
         data.push(newVal);
     }
@@ -94,11 +94,15 @@ function getDailyWeather(weatherData, numDays) {
         var notEndofDay = true;
 
         day.date = dayjs.unix(weatherData.list[dataIndex].dt);
-        day.description = [];
+        //day.description = [];
         do {
-            var iconStr = weatherData.list[dataIndex].weather[0].icon.slice(0, -1) //remove day night charator on icon
-            if (day.description[day.description.length - 1] != iconStr) {
-                day.description.push(iconStr);
+            var iconStr = weatherData.list[dataIndex].weather[0].icon.slice(0, -1) //remove day night charator on icon - pull back to number
+            if (day.description) {
+                if (parseInt(day.description) < parseInt(iconStr)) {
+                    day.description = iconStr;
+                }
+            } else {
+                day.description = iconStr;
             }
             if (day.temp_min) {
                 day.temp_min = Math.min(day.temp_min, weatherData.list[dataIndex].main.temp_min);
@@ -148,9 +152,7 @@ function displayWeather(weatherData) {
     //today's forcast
     TodayFocastEL.append($('<h2></h2>').text(weatherData.city.name + ' (' + dailyWeather[0].date.format('DD/MM/YYYY') + ')'));
     var imagesBlock = $('<div></div>').attr('class', 'weather-icon-container')
-    for (var j = 0; j < dailyWeather[0].description.length; j++) {
-        imagesBlock.append($('<img></img>').attr('src', 'https://openweathermap.org/img/wn/' + dailyWeather[0].description[j] + 'd.png'));
-    }
+    imagesBlock.append($('<img></img>').attr('src', 'https://openweathermap.org/img/wn/' + dailyWeather[0].description + 'd.png'));
     TodayFocastEL.append(imagesBlock);
 
     TodayFocastEL.append($('<p></p>').text('Temp: ' + weatherData.list[0].main.temp + ' (min: ' + dailyWeather[0].temp_min + '°C, max: ' + dailyWeather[0].temp_max + '°C )'));
@@ -161,13 +163,14 @@ function displayWeather(weatherData) {
     //5day forcasts
     for (var i = 1; i < dailyWeather.length; i++) {
         var weatherEL = $('<div></div>');
-        weatherEL.attr('class', 'col fiveday-itme');
-        weatherEL.append($('<h3></h3>').text(dailyWeather[i].date.format('DD/MM/YYYY')));
+        weatherEL.attr('class', 'col col-lg-2 fiveday-itme');
+        weatherEL.append($('<h4></h4>').text(dailyWeather[i].date.format('DD/MM/YYYY')));
         //weatherEL.append($('<img></img>').attr('src','https://openweathermap.org/img/wn/' + '10d' + '@2x.png'));
         var imagesBlock = $('<div></div>').attr('class', 'weather-icon-container')
-        for (var j = 0; j < dailyWeather[i].description.length; j++) {
-            imagesBlock.append($('<img></img>').attr('src', 'https://openweathermap.org/img/wn/' + dailyWeather[i].description[j] + 'd.png'));
-        }
+        /* for (var j = 0; j < dailyWeather[i].description.length; j++) {
+             imagesBlock.append($('<img></img>').attr('src', 'https://openweathermap.org/img/wn/' + dailyWeather[i].description[j] + 'd.png'));
+         }*/
+        imagesBlock.append($('<img></img>').attr('src', 'https://openweathermap.org/img/wn/' + dailyWeather[i].description + 'd.png'));
         weatherEL.append(imagesBlock);
         weatherEL.append($('<p></p>').text('Temp: min: ' + dailyWeather[i].temp_min + '°C, max: ' + dailyWeather[i].temp_max + '°C'));
         weatherEL.append($('<p></p>').text('Wind: ' + dailyWeather[i].wind + ' m/sec'));
