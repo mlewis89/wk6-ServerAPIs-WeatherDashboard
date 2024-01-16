@@ -1,11 +1,12 @@
 header{
     color: white;
     background-color: blue;
+    margin 0px 0px 500px 0px
 }
 
 header, h1{
     text-align: right;
-    padding: 0px 75px 0px 0px;
+    padding: 7px 75px 7px 0px;
     font-size: 1.25em;
 }
 
@@ -29,4 +30,8 @@ header, h1{
 
 #todayForcast{
     margin: 10px;
+}
+
+#searchbar{
+    width: 100%;
 }

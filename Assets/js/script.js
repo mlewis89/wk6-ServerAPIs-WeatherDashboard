@@ -163,8 +163,8 @@ function displayWeather(weatherData) {
     //5day forcasts
     for (var i = 1; i < dailyWeather.length; i++) {
         var weatherEL = $('<div></div>');
-        weatherEL.attr('class', 'col col-lg-2 fiveday-itme');
-        weatherEL.append($('<h4></h4>').text(dailyWeather[i].date.format('DD/MM/YYYY')));
+        weatherEL.attr('class', 'col-sm-5 col-lg-2  fiveday-itme');
+        weatherEL.append($('<h5></h5>').text(dailyWeather[i].date.format('DD/MM/YYYY')));
         //weatherEL.append($('<img></img>').attr('src','https://openweathermap.org/img/wn/' + '10d' + '@2x.png'));
         var imagesBlock = $('<div></div>').attr('class', 'weather-icon-container')
         /* for (var j = 0; j < dailyWeather[i].description.length; j++) {
