@@ -48,13 +48,13 @@ function getWeatherData_FromCityName(city) {
             }
         })
         .catch(function (error) {
-            alert('Unable to connect to openmweathermap.org');
+            alert('Unable to connect to openmweathermap.org-geocode');
         });
 }
 
 //API Get Location weather
 function getWeatherData_FromLatLong(lat, long) {
-    var apiUrl = 'api.openweathermap.org/data/2.5/forecast/daily?lat=' + lat + '&lon=' + long + '&cnt=6&appid=' + APIkey
+    var apiUrl = 'http://api.openweathermap.org/data/2.5/forecast?lat=' + lat + '&lon=' + long + '&units=metric&appid=' + APIkey;
 
     fetch(apiUrl)
         .then(function (response) {
@@ -67,26 +67,76 @@ function getWeatherData_FromLatLong(lat, long) {
             }
         })
         .catch(function (error) {
-            alert('Unable to connect to openmweathermap.org');
+            alert('Unable to connect to openmweathermap.org-forcast');
         });
+}
+
+function getDailyWeather(weatherData, numDays) {
+    if (numDays === undefined) {
+        var numDays = 5;
+    }
+    var dayArr = [];
+    var dataIndex = parseInt(0);
+    for (var i = 0; i < numDays; i++) {
+        var day = {};
+        var notEndofDay = true;
+
+        day.date = dayjs.unix(weatherData.list[dataIndex].dt);
+        day.description = [];
+        do {
+            day.description.push(weatherData.list[dataIndex].weather[0]);
+            if (day.temp_min) {
+                day.temp_min = Math.min(day.temp_min, weatherData.list[dataIndex].main.temp_min);
+            }
+            else {
+                day.temp_min = weatherData.list[dataIndex].main.temp_min;
+            }
+            if (day.temp_max) {
+                day.temp_max = Math.max(day.temp_max, weatherData.list[dataIndex].main.temp_max);
+            }
+            else {
+                day.temp_max = weatherData.list[dataIndex].main.temp_max;
+            }
+            if (day.wind) {
+                day.wind = Math.max(day.wind, weatherData.list[dataIndex].wind.speed);
+            }
+            else {
+                day.wind = weatherData.list[dataIndex].wind.speed;
+            }
+            if (day.humidity) {
+                day.humidity = Math.max(day.humidity, weatherData.list[dataIndex].main.humidity);
+            }
+            else {
+                day.humidity = weatherData.list[dataIndex].main.humidity;
+            }
+
+            notEndofDay = day.date.format('D') == dayjs.unix(weatherData.list[dataIndex + 1].dt).format('D');
+
+            dataIndex++;
+        } while (notEndofDay)
+        dayArr.push(day);
+    }
+    return dayArr;
+
 }
 
 function displayWeather(weatherData) {
     console.log(weatherData);
+    var dailyWeather = getDailyWeather(weatherData);
+
     //today's forcast
     TodayFocastEL.append($('<h2></h2>').text(weatherData.city.name + ' (' + dayjs.unix(weatherData.list[0].dt).format('DD/MM/YYYY') + ')'));
-    TodayFocastEL.append($('<p></p>').text('Temp: ' + weatherData.list[0].main.temp' (min: '+weatherData.list.main.temp_min+',max: '+weatherData.list.main.temp_max+' )'));
-    TodayFocastEL.append($('<p></p>').text('Wind: ' + weatherData.list[0].wind.speed' km/h'));
+    TodayFocastEL.append($('<p></p>').text('Temp: ' + weatherData.list[0].main.temp + ' (min: ' + weatherData.list.main.temp_min + ', max: ' + weatherData.list.main.temp_max + ' )'));
+    TodayFocastEL.append($('<p></p>').text('Wind: ' + weatherData.list[0].wind.speed + ' m/sec'));
     TodayFocastEL.append($('<p></p>').text('Humidity: ' + weatherData.list[0].main.humidty));
-    
 
-   //5day forcasts
-    for(var i = 0;i<=5;i++)
-    {
+
+    //5day forcasts
+    for (var i = 0; i <= 5; i++) {
         var weatherEL = $('<div></div>');
         weatherEL.append($('<h3></h3>').text(dayjs.unix(weatherData.list[0].dt).format('DD/MM/YYYY')));
-        weatherEL.append($('<p></p>').text('Temp: ' + weatherData.list[0].main.temp' (min: '+weatherData.list.main.temp_min+',max: '+weatherData.list.main.temp_max+' )'));
-        weatherEL.append($('<p></p>').text('Wind: ' + weatherData.list[0].wind.speed' km/h'));
+        weatherEL.append($('<p></p>').text('Temp: ' + weatherData.list[0].main.temp + ' (min: ' + weatherData.list.main.temp_min + ',max: ' + weatherData.list.main.temp_max + ' )'));
+        weatherEL.append($('<p></p>').text('Wind: ' + weatherData.list[0].wind.speed + ' m/sec'));
         weatherEL.append($('<p></p>').text('Humidity: ' + weatherData.list[0].main.humidty));
         FiveDayFocastEL.append(weatherEL);
     }
