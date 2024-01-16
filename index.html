@@ -16,13 +16,13 @@
         <h1>Weather Dashboard</h1>
     </header>
     <div class="container">
-        <div class="row">
+        <div class="row ">
             <div id="sidebar" class="col-sm-12 col-md-3 container">
-                <div class="row">
+                <form class="row" action="#" method="post" id="searchInput">
                     <h2 class="row searchbar">Search for a City:</h2>
-                    <input class="row" id='search-text' type="text" value=""></input>
-                    <button class="row btn btn-primary" id="Search-btn">Search</button>
-                </div>
+                    <input class="row" id='search-text' type="text" name="search-text" value="" required></input>
+                    <button class="row btn btn-primary" id="Search-btn" type="submit">Search</button>
+                </form>
                 <hr>
                 <div id="PreviousSearchContainer" class="row">
 

@@ -28,10 +28,16 @@ header, h1{
     margin: 3px;
 }
 
+.btn-primary{
+    margin: 20px 5px 5px 5px;
+}
+
 #todayForcast{
     margin: 10px;
 }
 
-#searchbar{
-    width: 100%;
+#searchInput{
+    justify-content: center;
 }
+
+
