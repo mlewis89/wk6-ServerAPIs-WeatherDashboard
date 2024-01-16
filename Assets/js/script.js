@@ -3,7 +3,7 @@ SearchButtonEL = $('#Search-btn');
 SeachDataEL = $('#search-text');
 PastCitiesEL = $('#PreviousSearchContainer');
 TodayFocastEL = $('#todayForcast');
-FiveDayFocastEL = $('#5DayForcast');
+FiveDayFocastEL = $('#FiveDayForcast');
 
 //GLOBAL: VARIABLES
 storageKey = "wk6-WeatherDashboard";
@@ -18,14 +18,26 @@ SearchButtonEL.on('click', function () {
     renderPage();
 });
 
+PastCitiesEL.on('click', function (event) {
+    updateLocalStorage(event.target.textContent);
+    renderPage();
+
+});
+
 //save search to local storage
 function updateLocalStorage(newVal) {
     var data = JSON.parse(localStorage.getItem(storageKey))
+    newVal = newVal.toUpperCase();
+    var temp = data.includes(newVal);
     if (data === undefined || data === null) {
         var data = [];
         data.push(newVal);
     }
-    else if (data[data.length - 1].toLowerCase() != newVal.toLowerCase()) {
+    //else if (data.[data.length - 1].toLowerCase() != newVal.toUpperCase()) {
+    else if (data.includes(newVal)) { //if already exists move it to end of list
+        var indexof = data.indexOf(newVal);
+        data.push(data.splice(indexof, 1)[0]);       
+    } else {
         data.push(newVal);
     }
     localStorage.setItem(storageKey, JSON.stringify(data));
@@ -84,12 +96,8 @@ function getDailyWeather(weatherData, numDays) {
         day.date = dayjs.unix(weatherData.list[dataIndex].dt);
         day.description = [];
         do {
-            console.log(day.description[day.description.length-1]);
-            console.log(weatherData.list[dataIndex].weather[0].icon);
-            console.log('--')
             var iconStr = weatherData.list[dataIndex].weather[0].icon.slice(0, -1) //remove day night charator on icon
-            if(day.description[day.description.length-1]!= iconStr)
-            {
+            if (day.description[day.description.length - 1] != iconStr) {
                 day.description.push(iconStr);
             }
             if (day.temp_min) {
@@ -134,15 +142,17 @@ function displayWeather(weatherData) {
     console.log(weatherData);
     var dailyWeather = getDailyWeather(weatherData);
 
+    TodayFocastEL.empty();
+    FiveDayFocastEL.empty();
+
     //today's forcast
-    TodayFocastEL.append($('<h2></h2>').text(weatherData.city.name + ' (' + dailyWeather[0].date.format('DD/MM/YYYY') + ')' ));
-    var imagesBlock = $('<div></div>').attr('class','weather-icon-container')
-    for(var j=0;j<dailyWeather[0].description.length; j++)
-    {
-        imagesBlock.append($('<img></img>').attr('src','https://openweathermap.org/img/wn/' + dailyWeather[0].description[j] + 'd.png'));
+    TodayFocastEL.append($('<h2></h2>').text(weatherData.city.name + ' (' + dailyWeather[0].date.format('DD/MM/YYYY') + ')'));
+    var imagesBlock = $('<div></div>').attr('class', 'weather-icon-container')
+    for (var j = 0; j < dailyWeather[0].description.length; j++) {
+        imagesBlock.append($('<img></img>').attr('src', 'https://openweathermap.org/img/wn/' + dailyWeather[0].description[j] + 'd.png'));
     }
     TodayFocastEL.append(imagesBlock);
-   
+
     TodayFocastEL.append($('<p></p>').text('Temp: ' + weatherData.list[0].main.temp + ' (min: ' + dailyWeather[0].temp_min + '°C, max: ' + dailyWeather[0].temp_max + '°C )'));
     TodayFocastEL.append($('<p></p>').text('Wind: ' + dailyWeather[0].wind + ' m/sec'));
     TodayFocastEL.append($('<p></p>').text('Humidity: ' + dailyWeather[0].humidity + ' %'));
@@ -151,12 +161,12 @@ function displayWeather(weatherData) {
     //5day forcasts
     for (var i = 1; i < dailyWeather.length; i++) {
         var weatherEL = $('<div></div>');
+        weatherEL.attr('class', 'col fiveday-itme');
         weatherEL.append($('<h3></h3>').text(dailyWeather[i].date.format('DD/MM/YYYY')));
         //weatherEL.append($('<img></img>').attr('src','https://openweathermap.org/img/wn/' + '10d' + '@2x.png'));
-        var imagesBlock = $('<div></div>').attr('class','weather-icon-container')
-        for(var j=0;j<dailyWeather[i].description.length; j++)
-        {
-            imagesBlock.append($('<img></img>').attr('src','https://openweathermap.org/img/wn/' + dailyWeather[i].description[j] + 'd.png'));
+        var imagesBlock = $('<div></div>').attr('class', 'weather-icon-container')
+        for (var j = 0; j < dailyWeather[i].description.length; j++) {
+            imagesBlock.append($('<img></img>').attr('src', 'https://openweathermap.org/img/wn/' + dailyWeather[i].description[j] + 'd.png'));
         }
         weatherEL.append(imagesBlock);
         weatherEL.append($('<p></p>').text('Temp: min: ' + dailyWeather[i].temp_min + '°C, max: ' + dailyWeather[i].temp_max + '°C'));
@@ -172,8 +182,9 @@ function renderPage() {
     var cities = JSON.parse(localStorage.getItem(storageKey));
     if (cities !== null || cities !== undefined) {
         for (var i = 0; i < cities.length; i++) {
-            var li = $('<li></li>').text(cities[i])
-            PastCitiesEL.append(li);
+            var li = $('<button></button>').text(cities[i])
+            li.attr('class', 'btn btn-secondary');
+            PastCitiesEL.prepend(li);
         }
         getWeatherData_FromCityName(cities[cities.length - 1]);
     }
