@@ -84,9 +84,13 @@ function getDailyWeather(weatherData, numDays) {
         day.date = dayjs.unix(weatherData.list[dataIndex].dt);
         day.description = [];
         do {
-            if(day.description[day.description.length-1]!=weatherData.list[dataIndex].weather[0].icon)
+            console.log(day.description[day.description.length-1]);
+            console.log(weatherData.list[dataIndex].weather[0].icon);
+            console.log('--')
+            var iconStr = weatherData.list[dataIndex].weather[0].icon.slice(0, -1) //remove day night charator on icon
+            if(day.description[day.description.length-1]!= iconStr)
             {
-                day.description.push(weatherData.list[dataIndex].weather[0].icon);
+                day.description.push(iconStr);
             }
             if (day.temp_min) {
                 day.temp_min = Math.min(day.temp_min, weatherData.list[dataIndex].main.temp_min);
@@ -135,7 +139,7 @@ function displayWeather(weatherData) {
     var imagesBlock = $('<div></div>').attr('class','weather-icon-container')
     for(var j=0;j<dailyWeather[0].description.length; j++)
     {
-        imagesBlock.append($('<img></img>').attr('src','https://openweathermap.org/img/wn/' + dailyWeather[0].description[j] + '.png'));
+        imagesBlock.append($('<img></img>').attr('src','https://openweathermap.org/img/wn/' + dailyWeather[0].description[j] + 'd.png'));
     }
     TodayFocastEL.append(imagesBlock);
    
@@ -152,10 +156,10 @@ function displayWeather(weatherData) {
         var imagesBlock = $('<div></div>').attr('class','weather-icon-container')
         for(var j=0;j<dailyWeather[i].description.length; j++)
         {
-            imagesBlock.append($('<img></img>').attr('src','https://openweathermap.org/img/wn/' + dailyWeather[i].description[j] + '.png'));
+            imagesBlock.append($('<img></img>').attr('src','https://openweathermap.org/img/wn/' + dailyWeather[i].description[j] + 'd.png'));
         }
         weatherEL.append(imagesBlock);
-        weatherEL.append($('<p></p>').text('Temp: min: ' + dailyWeather[i].temp_min + '°C ,max: ' + dailyWeather[i].temp_max + '°C'));
+        weatherEL.append($('<p></p>').text('Temp: min: ' + dailyWeather[i].temp_min + '°C, max: ' + dailyWeather[i].temp_max + '°C'));
         weatherEL.append($('<p></p>').text('Wind: ' + dailyWeather[i].wind + ' m/sec'));
         weatherEL.append($('<p></p>').text('Humidity: ' + dailyWeather[i].humidity + ' %'));
         FiveDayFocastEL.append(weatherEL);
@@ -164,7 +168,7 @@ function displayWeather(weatherData) {
 
 //render page
 function renderPage() {
-    PastCitiesEL.innerHTML = '';
+    PastCitiesEL.empty();
     var cities = JSON.parse(localStorage.getItem(storageKey));
     if (cities !== null || cities !== undefined) {
         for (var i = 0; i < cities.length; i++) {
