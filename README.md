@@ -1,6 +1,6 @@
 
 
-# Bootcamp Challenge Week Four - Server Side APIs Weather Dashboard using javascript
+# Bootcamp Challenge Week Six - Server Side APIs Weather Dashboard using javascript
 
 ## Description
 
