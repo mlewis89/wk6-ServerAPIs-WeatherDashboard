@@ -1,41 +1,39 @@
+/*Header ELEment for title*/
 header{
     color: white;
     background-color: blue;
     margin 0px 0px 500px 0px
 }
-
+/*Header text element*/
 header, h1{
     text-align: right;
     padding: 7px 75px 7px 0px;
     font-size: 1.25em;
 }
 
-
+/*styling on 5day forcast items*/
 .fiveday-itme{
     background-color: blue;
     color: white;
+    padding: 5px;
     margin: 10px;
 }
 
-.fiveday-itme, h3{
-    background-color: blue;
-    color: white;
-    padding: 5px;
-    margin: 5px;
-}
-
+/*button elements*/
 .btn{
     margin: 3px;
 }
 
-.btn-primary{
+/*search button element*/
+#Search-btn{
     margin: 20px 5px 5px 5px;
 }
 
+/*todays forcast container*/
 #todayForcast{
     margin: 10px;
 }
-
+/*search form*/
 #searchInput{
     justify-content: center;
 }
