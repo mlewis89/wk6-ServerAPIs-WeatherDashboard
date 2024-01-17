@@ -1,27 +1,37 @@
 
 
-# Bootcamp Challenge Week Four - Web APIs Quiz using javascript
+# Bootcamp Challenge Week Four - Server Side APIs Weather Dashboard using javascript
 
 ## Description
 
-Purpose: to test my knowledge of javascript and Web APIs.
+Purpose: to test my knowledge of javascript and Server Side APIs.
 
-In this project i was given no starter code and therefore i completed this task from scratch. The task was to create html, css and javascript code that enables a user to complete a quiz on the java script language, by dynamically chaging the displayed content on a single html page and then storing scores to local storage for use on a second htlm page of high scores.
+In this project i was given no starter code and therefore i completed this task from scratch. The task was to create html, css and javascript code that enables a user to search for weather data from around the world, by dynamically chaging the displayed content on a single html page and then storing previous searches to local storage for the ability to call back previous searches.
 
-The main focus of the assignment was on the javascript and therefore the page styling was not a priority 
+The page styling was inspired buy the supplied example.
 
-During this project I learnt how to pull data from a html form and how include audio elements, and activate them from javascript.
+During this project I learnt how to pull data from a server side api and process the received data into the required form. I also learnt the quirks ok combining asynconous codes with synconous code and why this should be avoided, to avoid functions return prematurely without the required data.
 
 ## User Story
 
 ```
-
+AS A traveler
+I WANT to see the weather outlook for multiple cities
+SO THAT I can plan a trip accordingly
 ```
 
 ## Acceptance Criteria
 
 ```
-
+GIVEN a weather dashboard with form inputs
+WHEN I search for a city
+THEN I am presented with current and future conditions for that city and that city is added to the search history
+WHEN I view current weather conditions for that city
+THEN I am presented with the city name, the date, an icon representation of weather conditions, the temperature, the humidity, and the wind speed
+WHEN I view future weather conditions for that city
+THEN I am presented with a 5-day forecast that displays the date, an icon representation of weather conditions, the temperature, the wind speed, and the humidity
+WHEN I click on a city in the search history
+THEN I am again presented with current and future conditions for that city
 ```
 
 ## Usage
@@ -34,10 +44,9 @@ https://github.com/mlewis89/wk6-ServerAPIs-WeatherDashboard/
 
 ## Screen Shots of Completed Challenge
 
-![completed application](./Assets/screenshots/Screenshot%202024-01-11%20135427.png)
-
-
-
+![completed application](./Assets/screenshots/Screenshot%202024-01-17%20111203.png)
+![completed application](./Assets/screenshots/Screenshot%202024-01-17%20111317.png)
+![completed application](./Assets/screenshots/Screenshot%202024-01-17%20111414.png)
 
 ## Installation
 

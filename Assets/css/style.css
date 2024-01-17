@@ -24,6 +24,11 @@ header, h1{
     margin: 3px;
 }
 
+/*side bar element*/
+#sidebar{
+    margin: 10px 0 0 0;
+}
+
 /*search button element*/
 #Search-btn{
     margin: 20px 5px 5px 5px;
